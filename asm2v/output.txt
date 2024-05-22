@@ -1,0 +1,11 @@
+	 assign rom[6'h001]=32'h28033046;		//ori r6,r2,0x00cc,
+	 assign rom[6'h002]=32'h00101464;		//add r5,r3,r4,
+	 assign rom[6'h003]=32'h38000866;		//store r6,0x0002(r3),
+	 assign rom[6'h004]=32'h34000489;		//load r9,0x0001(r4),
+	 assign rom[6'h005]=32'h14002d29;		//addi r9,r9,0x000b,
+	 assign rom[6'h006]=32'h14002d29;		//addi r9,r9,0x000b,
+	 assign rom[6'h007]=32'h40000821;		//bne r1,r1,0x2,
+	 assign rom[6'h008]=32'h48000001;		//jump 0x1,
+	 assign rom[6'h009]=32'h0821a408;		//srl r9,r8,0x3
+	 assign rom[6'h00a]=32'h00100421;		//add r1,r1,r1
+	 assign rom[6'h00b]=32'h00100421;		//add r1,r1,r1
