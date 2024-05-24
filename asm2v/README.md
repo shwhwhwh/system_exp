@@ -4,11 +4,11 @@
 
 ## 支持的指令集
 
-![image-20240524234016830](C:\Users\Reirui\AppData\Roaming\Typora\typora-user-images\image-20240524234016830.png)
+![image]([system_exp/asm2v/image-20240524234016830.png at main · shwhwhwh/system_exp (github.com)](https://github.com/shwhwhwh/system_exp/blob/main/asm2v/image-20240524234016830.png))
 
 ## 输入格式
 
-![image-20240524233351860](C:\Users\Reirui\AppData\Roaming\Typora\typora-user-images\image-20240524233351860.png)
+![image]([system_exp/asm2v/image-20240524234016830.png at main · shwhwhwh/system_exp (github.com)](https://github.com/shwhwhwh/system_exp/blob/main/asm2v/image-20240524234016830.png))
 
 1. 寄存器用"rx"表示，x为一个10进制数
 2. 立即数(shift, imm, offset, label, target)用"0x%x", "%x"为这个立即数的16进制表示
