@@ -8,7 +8,7 @@
 
 ## 输入格式
 
-![image](image-20240524234016830.png)
+![image](image-20240524233351860.png)
 
 1. 寄存器用"rx"表示，x为一个10进制数
 2. 立即数(shift, imm, offset, label, target)用"0x%x", "%x"为这个立即数的16进制表示
