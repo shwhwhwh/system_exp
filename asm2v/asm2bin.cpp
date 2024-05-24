@@ -100,17 +100,6 @@ int main()
             instructions.push_back(line);
     }
     infile.close();
-    // vector<string> instructions = { //这是输入
-    //     "ori r6,r2,0x00cc",
-    //     "add r5,r3,r4",
-    //     "store r6,0x0002(r3)",
-    //     "load r9,0x0001(r4)",
-    //     "addi r9,r9,0x000b",
-    //     "addi r9,r9,0x000b",
-    //     "bne r1,r1,0x2",
-    //     "jump 0x1",
-    //     "srl r9,r8,0x3"
-    //     };
     int i = 0;
     for (const string &instruction : instructions)
     {
