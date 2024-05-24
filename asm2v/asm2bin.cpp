@@ -42,21 +42,28 @@ unordered_map<string, string> opcodeMap = {
 
 unordered_set<char> delimiters = {' ', ',', '(', ')'};
 // 使用多个分隔符分割字符串
-std::vector<std::string> splitString(const std::string& input) {
+std::vector<std::string> splitString(const std::string &input)
+{
     std::vector<std::string> tokens;
     std::stringstream ss;
-    for (char ch : input) {
-        if (delimiters.find(ch) != delimiters.end()) {
-            if (!ss.str().empty()) {
+    for (char ch : input)
+    {
+        if (delimiters.find(ch) != delimiters.end())
+        {
+            if (!ss.str().empty())
+            {
                 tokens.push_back(ss.str());
                 ss.str("");
                 ss.clear();
             }
-        } else {
+        }
+        else
+        {
             ss << ch;
         }
     }
-    if (!ss.str().empty()) {
+    if (!ss.str().empty())
+    {
         tokens.push_back(ss.str());
     }
     return tokens;
@@ -69,6 +76,14 @@ std::string toBinaryString(int n)
     return s;
 }
 
+bool immFormatCheck(string imm)
+{
+    if (imm.substr(0, 2) != "0x" && imm.substr(0, 2) != "0X")
+        return true;
+    else
+        return false;
+}
+
 int main()
 {
     // 示例指令列表
@@ -78,14 +93,28 @@ int main()
     ifstream infile(in);
     ofstream outfile(out);
     string line;
-    while(getline(infile, line)) {
-        if(!line.empty())instructions.push_back(line);
+    bool invalid_inst = false;
+    while (getline(infile, line))
+    {
+        if (!line.empty())
+            instructions.push_back(line);
     }
     infile.close();
+    // vector<string> instructions = { //这是输入
+    //     "ori r6,r2,0x00cc",
+    //     "add r5,r3,r4",
+    //     "store r6,0x0002(r3)",
+    //     "load r9,0x0001(r4)",
+    //     "addi r9,r9,0x000b",
+    //     "addi r9,r9,0x000b",
+    //     "bne r1,r1,0x2",
+    //     "jump 0x1",
+    //     "srl r9,r8,0x3"
+    //     };
     int i = 0;
     for (const string &instruction : instructions)
     {
-        std::vector<std::string>inst_split = splitString(instruction);
+        std::vector<std::string> inst_split = splitString(instruction);
         string op, rd, rs, rt, imm, offset, shift, target;
         string inst;
         int instInt;
@@ -104,62 +133,94 @@ int main()
             instInt = stoi(inst, nullptr, 2);
             outfile << "	 assign rom[6'h" << hex << std::setw(3) << std::setfill('0') << i << "]=32'h" << hex << std::setw(8) << std::setfill('0') << instInt << ";		//" << instruction << endl;
         }
-        if(op == "sll" || op == "srl")
+        else if (op == "sll" || op == "srl")
         {
             rd = inst_split[1];
             rt = inst_split[2];
             shift = inst_split[3];
             rd = toBinaryString(getRegisterNumber(rd)).substr(11);
             rt = toBinaryString(getRegisterNumber(rt)).substr(11);
-            shift = toBinaryString(stoi(shift, nullptr, 16)).substr(11);//shift in decimal
+            if (immFormatCheck(shift))
+            {
+                outfile << "Invalid shift format: " << shift << endl;
+                continue;
+            }
+            shift = toBinaryString(stoi(shift, nullptr, 16)).substr(11); // shift in decimal
             inst = opcodeMap[op] + shift + rd + "00000" + rt;
             instInt = stoi(inst, nullptr, 2);
             outfile << "	 assign rom[6'h" << hex << std::setw(3) << std::setfill('0') << i << "]=32'h" << hex << std::setw(8) << std::setfill('0') << instInt << ";		//" << instruction << endl;
         }
-        if(op == "addi" || op == "andi" || op == "ori" || op == "xori")
+        else if (op == "addi" || op == "andi" || op == "ori" || op == "xori")
         {
             rt = inst_split[1];
             rs = inst_split[2];
             imm = inst_split[3];
             rt = toBinaryString(getRegisterNumber(rt)).substr(11);
             rs = toBinaryString(getRegisterNumber(rs)).substr(11);
-            imm = toBinaryString(stoi(imm, nullptr, 16));//imm in decimal
+            if (immFormatCheck(imm))
+            {
+                outfile << "Invalid imm format: " << imm << endl;
+                continue;
+            }
+            imm = toBinaryString(stoi(imm, nullptr, 16)); // imm in decimal
             inst = opcodeMap[op] + imm + rs + rt;
             instInt = stoi(inst, nullptr, 2);
             outfile << "	 assign rom[6'h" << hex << std::setw(3) << std::setfill('0') << i << "]=32'h" << hex << std::setw(8) << std::setfill('0') << instInt << ";		//" << instruction << endl;
         }
-        if(op == "load" || op == "store")
+        else if (op == "load" || op == "store")
         {
             rt = inst_split[1];
             offset = inst_split[2];
             rs = inst_split[3];
             rt = toBinaryString(getRegisterNumber(rt)).substr(11);
             rs = toBinaryString(getRegisterNumber(rs)).substr(11);
-            offset = toBinaryString(stoi(offset, nullptr, 16));//offset in decimal
+            if (immFormatCheck(offset))
+            {
+                outfile << "Invalid offset format: " << offset << endl;
+                continue;
+            }
+            offset = toBinaryString(stoi(offset, nullptr, 16)); // offset in decimal
             inst = opcodeMap[op] + offset + rs + rt;
             instInt = stoi(inst, nullptr, 2);
             outfile << "	 assign rom[6'h" << hex << std::setw(3) << std::setfill('0') << i << "]=32'h" << hex << std::setw(8) << std::setfill('0') << instInt << ";		//" << instruction << endl;
         }
-        if(op == "beq" || op == "bne")
+        else if (op == "beq" || op == "bne")
         {
             rs = inst_split[1];
             rt = inst_split[2];
             offset = inst_split[3];
             rs = toBinaryString(getRegisterNumber(rs)).substr(11);
             rt = toBinaryString(getRegisterNumber(rt)).substr(11);
-            offset = toBinaryString(stoi(offset, nullptr, 16));//offset in decimal
+            if (immFormatCheck(offset))
+            {
+                outfile << "Invalid offset format: " << offset << endl;
+                continue;
+            }
+            offset = toBinaryString(stoi(offset, nullptr, 16)); // offset in decimal
             inst = opcodeMap[op] + offset + rs + rt;
             instInt = stoi(inst, nullptr, 2);
             outfile << "	 assign rom[6'h" << hex << std::setw(3) << std::setfill('0') << i << "]=32'h" << hex << std::setw(8) << std::setfill('0') << instInt << ";		//" << instruction << endl;
         }
-        if(op == "jump")
+        else if (op == "jump")
         {
             target = inst_split[1];
-            target = bitset<26>(stoi(target, nullptr, 16)).to_string();//offset in decimal
+            if (immFormatCheck(target))
+            {
+                outfile << "Invalid target format: " << target << endl;
+                continue;
+            }
+            target = bitset<26>(stoi(target, nullptr, 16)).to_string(); // offset in decimal
             inst = opcodeMap[op] + target;
             instInt = stoi(inst, nullptr, 2);
             outfile << "	 assign rom[6'h" << hex << std::setw(3) << std::setfill('0') << i << "]=32'h" << hex << std::setw(8) << std::setfill('0') << instInt << ";		//" << instruction << endl;
         }
+        else
+            {
+                outfile << "Invalid instruction name: " << op << endl;
+                invalid_inst = true;
+            }
     }
+    if(invalid_inst)outfile << endl << "##############################################################" << endl << "please check the README file to get the instruction name right" << endl << "##############################################################";
+    outfile.close();
     return 0;
 }
