@@ -1,0 +1,3 @@
+verilog work "remote_sources/_/SCCPU/mux32_2_1.v"
+verilog work "remote_sources/_/SCCPU/alu.v"
+verilog work "remote_sources/_/SCCPU/EXE_STAGE.v"

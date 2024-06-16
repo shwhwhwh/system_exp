@@ -1,0 +1,1 @@
+-intstyle "ise" -incremental -lib "unisims_ver" -lib "unimacro_ver" -lib "xilinxcorelib_ver" -lib "secureip" -o "C:/Users/lirui/Desktop/lr/interrupt_pcpu/SCCPU_t_isim_beh.exe" -prj "C:/Users/lirui/Desktop/lr/interrupt_pcpu/SCCPU_t_beh.prj" "work.SCCPU_t" "work.glbl" 

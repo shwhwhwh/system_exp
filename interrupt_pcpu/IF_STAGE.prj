@@ -1,0 +1,5 @@
+verilog work "remote_sources/_/SCCPU/mux32_4_1.v"
+verilog work "remote_sources/_/SCCPU/Inst_ROM.v"
+verilog work "remote_sources/_/SCCPU/dff32.v"
+verilog work "remote_sources/_/SCCPU/add32.v"
+verilog work "remote_sources/_/SCCPU/IF_STAGE.v"
